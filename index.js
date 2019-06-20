@@ -1,7 +1,10 @@
-require('dotenv-safe').config()  // Load environment variables
+// Load environment variables
+require('dotenv-safe').config()
+
+// Dependencies
 const Discord = require('discord.js')
-const { createLogger, format, transports } = require('winston')
 const { not, propEq } = require('ramda')
+const { createLogger } = require('./logger')
 
 
 // === Variables ===
@@ -10,33 +13,33 @@ const COMMAND_PREFIX = '_'
 const COMMAND_PREFIX_REGEX = /\_/
 
 
-// === Bot Setup ===
-
-const { BOT_TOKEN } = process.env
-console.log({ BOT_TOKEN })
-const bot = new Discord.Client()
-
 // === Logger Setup ===
 
-const logger = createLogger({
-    level: 'info'
-})
 
-// Shouldn't print colors to production
-logger.add(new transports.Console({
-    format: format.combine(
-        format.colorize(),
-        format.simple()
-    )
-}));
-
+const logger = createLogger()
 const logInfo = logger.info
 const log = logger.log
 const logError = logger.error
 
 
 
+// === Bot Setup ===
+
+
+let bot
+try {
+    bot = new Discord.Client()
+} catch(err) {
+    logError(bot)
+    process.exit(1)
+}
+
+const { BOT_TOKEN } = process.env
+console.log({ BOT_TOKEN })
+
+
 // === Commands ===
+
 
 /* 
  * Command Map.
