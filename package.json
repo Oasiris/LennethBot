@@ -1,0 +1,23 @@
+{
+  "name": "lenneth-bot",
+  "version": "1.0.0",
+  "description": "## Libraries",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "ava"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "ava": "^2.1.0"
+  },
+  "dependencies": {
+    "discord.js": "^11.5.1",
+    "dotenv-safe": "^6.1.0",
+    "ramda": "^0.26.1",
+    "winston": "^3.2.1"
+  }
+}
