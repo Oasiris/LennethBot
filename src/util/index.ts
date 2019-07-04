@@ -19,7 +19,7 @@ export class StringUtil {
      * @param {Number} tokenStartIndex 
      */
     static getSuffix(str, tokenStartIndex) {
-        const tokens = tokenize(str)
+        const tokens = StringUtil.tokenize(str)
 
         let latestIdx = 0
         {
@@ -45,4 +45,3 @@ export class StringUtil {
         return tokens.slice(tokenStartIndex.join(' '))
     }
 }
-
