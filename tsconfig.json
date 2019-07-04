@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "outDir": "lib",
+
+    "alwaysStrict": true,
+    "experimentalDecorators": true,
+    "lib": ["es2018"],
+    "target": "es2018",
+    "module": "commonjs",
+    "resolveJsonModule": true
+  },
+  "compileOnSave": true,
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"]
+}

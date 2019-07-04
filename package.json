@@ -2,17 +2,24 @@
   "name": "lenneth-bot",
   "version": "1.0.0",
   "description": "## Libraries",
-  "main": "index.js",
+  "main": "lib/app.js",
   "directories": {
     "test": "tests"
   },
+  "engines": {
+    "node": "10"
+  },
   "scripts": {
-    "test": "ava"
+    "test": "ava",
+    "old-start": "tsc && nodemon lib/app.js",
+    "start": "tsc && concurrently \"tsc --watch\" \"nodemon lib/app.js\"",
+    "serve": "nodemon lib/app.js"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "ava": "^2.1.0"
+    "ava": "^2.1.0",
+    "concurrently": "^4.1.1"
   },
   "dependencies": {
     "discord.js": "^11.5.1",

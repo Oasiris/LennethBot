@@ -1,6 +1,6 @@
-const { createLogger, format, transports } = require('winston')
+import { createLogger, format, transports } from 'winston'
 
-module.exports.createLogger = function() {
+function instantiateLogger() {
     const logger = createLogger({
         level: 'info'
     })
@@ -15,3 +15,5 @@ module.exports.createLogger = function() {
 
     return logger
 }
+
+export { instantiateLogger }
