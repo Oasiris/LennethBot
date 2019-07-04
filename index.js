@@ -5,6 +5,7 @@ require('dotenv-safe').config()
 const Discord = require('discord.js')
 const { not, propEq } = require('ramda')
 const { createLogger } = require('./logger')
+const commands = require('./commands')
 
 
 // === Variables ===
@@ -41,27 +42,12 @@ console.log({ BOT_TOKEN })
 // === Commands ===
 
 
-/* 
- * Command Map.
- *
- * Each key corresponds to a function representing that command.
- * 
- * Command functions take an object containing all bot actions, pulling
- * only those which they need, and call those bot actions to
- * make the bot do things.
- * 
- * Notice that the commands do not gain access to the original message object.
+/** 
+ * A map from command names to functions.
+ * Each function takes an object of bot actions.
  */
-const COMMANDS = {
-    ping: ({ say }) => say('Pong!'),
-    pong: ({ say }) => say('Ping!'),
-}
+const COMMANDS = commands
 
-/*
-Note:
- - "Command" -- when one invokes an action.
- - "Action" -- something that happens as a result of a command.
-*/
 
 /**
  * Class full of functions that do neat things for incoming messages.
@@ -116,7 +102,6 @@ class MessageUtil {
     }
 }
 
-
 /**
  * Given a Message, returns actions that can be invoked by the bot
  * using properties of the object.
@@ -126,7 +111,6 @@ function generateBotActions(msg) {
         say: string => msg.channel.send(string)
     }
 }
-
 
 function handleMessageEvent(msg) {
     logInfo(`<${msg.author.tag}> [#${msg.channel.name}]: ${msg.content}`)
@@ -150,21 +134,15 @@ function handleMessageEvent(msg) {
     }
 }
 
-
 function handleReady() {
     logInfo("Ready!")
 }
 
+// === Bot Handling ===
+
 bot.on('ready', handleReady)
 bot.on('message', handleMessageEvent)
 
-// bot.on('messageCreate', msg => {
-//     if (msg.content === '!ping') {
-//         bot.createMessage(msg.channel.id, 'Pong!')
-//     } else if (msg.content === '!pong') {
-//         bot.createMessage(msg.channel.id, 'Ping!')
-//     }
-// })
 
 // === Channel Map ===
 
