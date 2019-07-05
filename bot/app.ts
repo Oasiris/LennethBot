@@ -11,8 +11,7 @@ import { startCli } from './cli'
 
 // === Variables ===
 
-const COMMAND_PREFIX: string = '_'
-const COMMAND_PREFIX_REGEX = /\_/
+const COMMAND_PREFIX = process.env.COMMAND_PREFIX
 
 
 // === Logger Setup ===
@@ -54,11 +53,11 @@ const COMMANDS = commands
  * Class full of functions that do neat things for incoming messages.
  */
 export class MessageUtil {
-    static isCommand(string, commandBank = commands) {
+    static isCommand(string: string, commandBank = commands) {
         const isNull = val => val === null
-        return not(isNull(string.match(COMMAND_PREFIX_REGEX)))
+        return string.indexOf(COMMAND_PREFIX) === 0
     }
-
+    
     static purifyCommand(fullCommandString, commandBank = commands) {
         return fullCommandString.slice(COMMAND_PREFIX.length)
     }
@@ -95,7 +94,11 @@ export class MessageUtil {
         const { command } = intentObject
         if (validActions.includes(command)) {
             onValid(command, botActions, intentObject)
-            COMMANDS[command](botActions) // Invoke action
+            try {
+                COMMANDS[command](botActions) // Invoke action
+            } catch (err) {
+                logger.error(err)
+            }
         } else {
             onInvalid(command, intentObject)
         }
@@ -113,16 +116,20 @@ function generateBotActions(msg) {
     }
 }
 
-function handleMessageEvent(msg) {
-    logInfo(`<${msg.author.tag}> [#${msg.channel.name}]: ${msg.content}`)
+function handleMessageEvent(msg: Discord.Message) {
+    if (msg.author.bot) {
+        return;
+    }
+    if (msg.channel instanceof Discord.TextChannel)
+        logger.verbose(`<${msg.author.tag}> [#${msg.channel.name}]: ${msg.content}`)
     
     // Functions
     const botActions = generateBotActions(msg)
     const onValidCommand = (command, intentObject) => {
-        logInfo(`Action ${command} invoked by ${msg.author.tag}`)
+        logger.verbose(`Action ${command} invoked by ${msg.author.tag}`)
     }
     const onInvalidCommand = (command, intentObject) => {
-        logInfo(`Command ${command} by ${msg.author.tag} failed`)
+        logger.verbose(`Command ${command} by ${msg.author.tag} failed`)
     }
     
     

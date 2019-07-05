@@ -12,7 +12,7 @@
   "scripts": {
     "old-start": "tsc && nodemon lib/app.js",
     "watch": "tsc -w",
-    "start": "tsc && \"nodemon lib/app.js\"",
+    "start": "tsc && nodemon lib/app.js",
     "serve": "nodemon lib/app.js"
   },
   "author": "",

@@ -14,14 +14,23 @@ export const commandFiles = uniq(
         // globby.sync(`${__dirname}/*(!(index.js))`, options),
         globby.sync(`${__dirname}/*/index.js`, options),
         globby.sync(`${__dirname}/*/*/index.js`, options),
-        globby.sync(`${__dirname}/*(!(help))/*.js`, options)
+        globby.sync(`${__dirname}/*(!(special))/*.js`, options)
     ])
 );
 
-const commands = pipe(
+const basicCommands = pipe(
     map((filepath: string) => require(filepath)),
     mergeAll,
 )(commandFiles)
+
+// === Special commands ===
+
+import { createHelpCommand } from './special/help'
+
+let commands = {
+    ...basicCommands,
+    help: createHelpCommand(basicCommands)
+}
 
 console.log({ commandFiles, commands })
 

@@ -10,7 +10,8 @@ function instantiateLogger() {
         format: format.combine(
             format.colorize(),
             format.simple()
-        )
+        ),
+        level: 'verbose'
     }));
 
     return logger
