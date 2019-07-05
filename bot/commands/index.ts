@@ -4,7 +4,7 @@ const pipe = <any>ramdaPipe
 
 // ——————
 
-const options = {
+const options: globby.GlobbyOptions = {
     onlyFiles: true,
     absolute: true,
 };

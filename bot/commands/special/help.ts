@@ -2,10 +2,12 @@ import { RichEmbed } from "discord.js"
 import { FullCommand } from "../../models/command";
 
 /**
- * Help 
+ * 
+ * @param commands 
  */
-
-export const createHelpCommand = (commands) => {
+export function createHelpCommand(
+  commands: { [key: string]: FullCommand | any }
+) {
   return function help({ say, bot }) {
     const entries = Object.entries(commands)
     const { COMMAND_PREFIX } = process.env
