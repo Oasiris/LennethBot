@@ -1,11 +1,14 @@
 module.exports = {
-    testEmbed1: ({ say }) => {
-        say({
-            embed: {
-                color: 3447003,
-                description: "A very simple Embed!"
-            }
-        })
+    testEmbed1: {
+        description: "Used to test bot's Rich Embed.",
+        effect: ({ say }) => {
+            say({
+                embed: {
+                    color: 3447003,
+                    description: "A very simple Embed!"
+                }
+            })
+        }
     },
     testEmbed2: ({ say, bot }) => {
         say({

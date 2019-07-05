@@ -1,4 +1,5 @@
 import { RichEmbed } from "discord.js"
+import { FullCommand } from "../../models/command";
 
 /**
  * Help 
@@ -6,7 +7,7 @@ import { RichEmbed } from "discord.js"
 
 export const createHelpCommand = (commands) => {
   return function help({ say, bot }) {
-    const verbs = Object.keys(commands)
+    const entries = Object.entries(commands)
     const { COMMAND_PREFIX } = process.env
 
     const embed: Partial<RichEmbed> = new RichEmbed({
@@ -17,9 +18,9 @@ export const createHelpCommand = (commands) => {
       title:       `List of Commands`,
       description: `━━━━━`,
       fields: [].concat(
-        verbs.map(verb => ({
+        entries.map(([verb, cmd]) => ({
           name: `${COMMAND_PREFIX}${verb}`,
-          value: "Default text"
+          value: (cmd as FullCommand).description || '—'
         }))
       ),
       // timestamp: new Date(),

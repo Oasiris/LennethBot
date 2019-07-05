@@ -7,6 +7,7 @@ import { not, propEq } from 'ramda'
 import { instantiateLogger as createLogger } from './logger'
 import commands from './commands'
 import { startCli } from './cli'
+import { FullCommand } from './models/command'
 
 
 // === Variables ===
@@ -95,7 +96,13 @@ export class MessageUtil {
         if (validActions.includes(command)) {
             onValid(command, botActions, intentObject)
             try {
-                COMMANDS[command](botActions) // Invoke action
+                const cmd = COMMANDS[command]
+                if (typeof cmd === 'function') {
+                    COMMANDS[command](botActions) // Invoke action
+                } else if ((cmd as FullCommand).effect) {
+                    COMMANDS[command].effect(botActions)
+                }
+                
             } catch (err) {
                 logger.error(err)
             }
