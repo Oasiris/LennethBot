@@ -12,13 +12,33 @@ import { Util } from '../../util/util'
  * Notice that the commands do not gain access to the original message object.
  */
 const COMMANDS = {
-    ping: ({ say }) => say('Pong!'),
-    pong: ({ say }) => say('Ping!'),
+    ping: {
+        description: '',
+        unlisted: true,
+        effect: ({ say }) => say('Pong!'),
+    },
+    pong: {
+        description: '',
+        unlisted: true,
+        effect: ({ say }) => say('Ping!'),
+    },
 
     async: async ({ say }) => {
         say("ZZZ...")
         await Util.sleep(1000)
         say("(wakes up)")
+    },
+
+
+
+    about: {
+        description: 'Learn more about Lenneth, the valkyrie bot.',
+        effect: ({ say }) => {
+            say(`Hi! I'm Lenneth.
+    I'm a gaming Discord bot, and I'm currently under development. Type "${process.env.COMMAND_PREFIX}help" to see a list of commands.
+    In my free time, I search for suitable souls in Midgard to become my Einherjar, to fight alongside the Aesir to help prevent Ragnarok.
+    My favorite hobby is long walks in flower meadows.`)
+        }
     }
 
 }

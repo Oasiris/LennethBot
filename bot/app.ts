@@ -128,10 +128,12 @@ export class MessageUtil {
                 })
             }
             console.log({ commandFunction, params })
+        } else {
+            botActions.say(`That command is currently broken—try again later!`)
         }
 
         // Execute
-        // commandFunction(commandPayload)
+        commandFunction(commandPayload)
 
         /*
         I want to put in:

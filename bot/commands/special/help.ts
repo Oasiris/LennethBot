@@ -20,7 +20,11 @@ export function createHelpCommand(
    */
   function help({ say, bot }) {
     const commandEntries = Object.entries(commands)
-    const cmdHelpFields = commandEntries.map(([verb, cmd]) => {
+    const cmdHelpFields = commandEntries
+    .filter(([verb, cmd]) => {
+      return !(cmd as FullCommand).unlisted
+    })
+    .map(([verb, cmd]) => {
       return {
         name: process.env.COMMAND_PREFIX + verb,
         // If the cmd is a FullCommand, display its description

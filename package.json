@@ -23,9 +23,12 @@
     "concurrently": "^4.1.1"
   },
   "dependencies": {
+    "axios": "^0.19.0",
     "discord.js": "^11.5.1",
     "dotenv-safe": "^6.1.0",
     "globby": "^10.0.0",
+    "ordinal": "^1.0.3",
+    "pokedex-promise-v2": "^3.2.0",
     "ramda": "^0.26.1",
     "winston": "^3.2.1"
   }

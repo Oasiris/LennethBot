@@ -1,7 +1,8 @@
 export type FullCommand = {
-  description: string
-  options?: object[]
   effect: any
+  description: string
+  unlisted?: boolean
+  options?: object[]
   aliases?: string[]
 
   // Arguments for the command.
