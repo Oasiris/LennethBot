@@ -1,34 +1,38 @@
 import { RichEmbed } from "discord.js"
-import { FullCommand } from "../../models/command";
+import { FullCommand } from "../../models/command"
+
+export const alias = ['commands']
 
 /**
+ * Returns a function-command `help` which, when triggered, will print a
+ * helpful message.
  * 
- * @param commands 
+ * @param commands An object whose values are either FullCommands or 
+ *    functions representing simple function-commands.
  */
 export function createHelpCommand(
   commands: { [key: string]: FullCommand | any }
 ) {
-  return function help({ say, bot }) {
-    const entries = Object.entries(commands)
-    const { COMMAND_PREFIX } = process.env
+  return help
+
+  /**
+   * Fuck yeah.
+   */
+  function help({ say, bot }) {
+    const commandEntries = Object.entries(commands)
+    const cmdHelpFields = commandEntries.map(([verb, cmd]) => {
+      return {
+        name: process.env.COMMAND_PREFIX + verb,
+        // If the cmd is a FullCommand, display its description
+        value: (cmd as FullCommand).description || '—'
+      }
+    })
 
     const embed: Partial<RichEmbed> = new RichEmbed({
-      // author: {
-      //   name: bot.user.username,
-      //   icon_url: bot.user.avatarURL,
-      // },
       title:       `List of Commands`,
       description: `━━━━━`,
-      fields: [].concat(
-        entries.map(([verb, cmd]) => ({
-          name: `${COMMAND_PREFIX}${verb}`,
-          value: (cmd as FullCommand).description || '—'
-        }))
-      ),
-      // timestamp: new Date(),
-      footer: {
-        text: "━━━━━━"
-      }
+      fields: cmdHelpFields,
+      footer: { text: "━━━━━━" }
     })
     embed.setColor('#ff00ff')
     

@@ -8,7 +8,8 @@ module.exports = {
                     description: "A very simple Embed!"
                 }
             })
-        }
+        },
+        aliases: ['testEmbedOne']
     },
     testEmbed2: ({ say, bot }) => {
         say({

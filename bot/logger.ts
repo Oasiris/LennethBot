@@ -18,3 +18,5 @@ function instantiateLogger() {
 }
 
 export { instantiateLogger }
+
+// export const logger = instantiateLogger()
