@@ -1,3 +1,5 @@
+import { Util } from '../../util/util'
+
 /* 
  * Command Map.
  *
@@ -12,6 +14,12 @@
 const COMMANDS = {
     ping: ({ say }) => say('Pong!'),
     pong: ({ say }) => say('Ping!'),
+
+    async: async ({ say }) => {
+        say("ZZZ...")
+        await Util.sleep(1000)
+        say("(wakes up)")
+    }
 
 }
 
