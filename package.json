@@ -10,20 +10,22 @@
     "node": "10"
   },
   "scripts": {
-    "test": "ava",
     "old-start": "tsc && nodemon lib/app.js",
-    "start": "tsc && concurrently \"tsc --watch\" \"nodemon lib/app.js\"",
+    "watch": "tsc -w",
+    "start": "tsc && \"nodemon lib/app.js\"",
     "serve": "nodemon lib/app.js"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/ramda": "github:types/npm-ramda#dist",
     "ava": "^2.1.0",
     "concurrently": "^4.1.1"
   },
   "dependencies": {
     "discord.js": "^11.5.1",
     "dotenv-safe": "^6.1.0",
+    "globby": "^10.0.0",
     "ramda": "^0.26.1",
     "winston": "^3.2.1"
   }

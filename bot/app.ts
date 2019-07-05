@@ -108,7 +108,8 @@ export class MessageUtil {
  */
 function generateBotActions(msg) {
     return {
-        say: string => msg.channel.send(string)
+        say: string => msg.channel.send(string),
+        bot
     }
 }
 
@@ -150,8 +151,6 @@ bot.on('message', handleMessageEvent)
 const { GUILD_ID } = process.env
 console.log({ GUILD_ID })
 
-
-
 let channelNameMap = {};
 
 bot.on('ready', createChannelMap)
@@ -167,7 +166,6 @@ function createChannelMap() {
     textChannels.forEach(ch => {
         channelNameMap[ch.name] = ch
     })
-    // console.log(channelNameMap)
 
     logInfo("Channel map complete")
 }

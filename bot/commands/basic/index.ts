@@ -12,6 +12,8 @@
 const COMMANDS = {
     ping: ({ say }) => say('Pong!'),
     pong: ({ say }) => say('Ping!'),
+
 }
 
-export default COMMANDS
+// export default COMMANDS
+module.exports = COMMANDS
