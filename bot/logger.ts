@@ -10,10 +10,13 @@ function instantiateLogger() {
         format: format.combine(
             format.colorize(),
             format.simple()
-        )
+        ),
+        level: 'verbose'
     }));
 
     return logger
 }
 
 export { instantiateLogger }
+
+// export const logger = instantiateLogger()

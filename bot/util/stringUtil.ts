@@ -6,11 +6,11 @@ export class StringUtil {
      * Returns a string as a list of tokens.
      * @param {String} str 
      */
-    static tokenize(str) {
+    static tokenize(str: string) {
         return str
             .trim()
             .split(/s+/)
-            .map(s => s.trim())
+            .map((s) => s.trim())
     }
 
     /**

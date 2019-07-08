@@ -11,6 +11,7 @@
   },
   "compileOnSave": true,
   "strictNullChecks": true,
+  "trailing-comma": true,
   "include": ["bot/**/*.ts"],
   "exclude": ["node_modules"]
 }
