@@ -10,6 +10,7 @@
     "resolveJsonModule": true
   },
   "compileOnSave": true,
+  "strictNullChecks": true,
   "include": ["bot/**/*.ts"],
   "exclude": ["node_modules"]
 }
