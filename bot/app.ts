@@ -117,7 +117,14 @@ export class MessageUtil {
             commandFunction = cmd.effect
             params = cmd.params
             
-            {
+            
+        } else {
+            botActions.say(`That command is currently broken—try again later!`)
+        }
+
+        // Execute
+        try {
+            if (params) {
                 params.forEach(([tokenIdx, param, isRequired]) => {
                     console.log({ tokenIdx, param, isRequired, tokens })
                     if (isRequired && tokenIdx >= tokens.length) {
@@ -128,12 +135,11 @@ export class MessageUtil {
                 })
             }
             console.log({ commandFunction, params })
-        } else {
-            botActions.say(`That command is currently broken—try again later!`)
+            commandFunction(commandPayload)
+        } catch (err) {
+            console.error(err)
         }
-
-        // Execute
-        commandFunction(commandPayload)
+        
 
         /*
         I want to put in:

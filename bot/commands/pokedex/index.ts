@@ -16,30 +16,30 @@ COMMANDS.pokedex = {
 }
 
 COMMANDS.pokedex.effect = async ({ say, tokens }) => {
-  
+  say("Coming soon!")
 }
 
 
-const commands = {
-  pokedex: {
-    usage: "<Pokemon name OR National Dex number>",
-    aliases: ['pokemon', 'dex'],
-    args: [
-      [1, 'identifier']
-    ],
-    effect: async ({ say, tokens }) => {
-      let pkmn
-      try {
-        pkmn = await getPokemonByName('eevee')
-      } catch (err) {
-        console.error(err)
-      }
-      say(JSON.stringify(pkmn).slice(0, 2000))
-      // say("Yeah")
+// const commands = {
+//   pokedex: {
+//     usage: "<Pokemon name OR National Dex number>",
+//     aliases: ['pokemon', 'dex'],
+//     args: [
+//       [1, 'identifier']
+//     ],
+//     effect: async ({ say, tokens }) => {
+//       let pkmn
+//       try {
+//         pkmn = await getPokemonByName('eevee')
+//       } catch (err) {
+//         console.error(err)
+//       }
+//       say(JSON.stringify(pkmn).slice(0, 2000))
+//       // say("Yeah")
       
-    }
-  }
-}
+//     }
+//   }
+// }
 
 
 module.exports = COMMANDS
