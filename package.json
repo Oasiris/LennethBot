@@ -27,6 +27,8 @@
     "axios": "^0.19.0",
     "discord.js": "^11.5.1",
     "dotenv-safe": "^6.1.0",
+    "firebase-admin": "^8.3.0",
+    "firebase-functions": "^3.2.0",
     "globby": "^10.0.0",
     "ordinal": "^1.0.3",
     "pokedex-promise-v2": "^3.2.0",

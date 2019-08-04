@@ -1,7 +1,11 @@
-import { MessageUtil } from "./app"
-import COMMANDS from "./commands"
 import * as Discord from 'discord.js'
-import winston = require("winston");
+import winston = require("winston")
+
+import { MessageUtils } from "./app"
+import COMMANDS from "./commands"
+
+import { db } from './db'
+
 
 type ClimandPayload = {
     bot?: Discord.Client,
@@ -35,15 +39,24 @@ const CLI_COMMANDS = {
         console.log("Hi!")
     },
 
+    // TODO
     sendChannel: ({ bot, logger, tokens, msg }) => {
 
     },
+
+    writeToFirestore: async ({}) => {
+        await db.collection('test').add({
+            isSaved: true,
+        })
+    }
+
+    
 }
 
 // === CLI ===
 
 function createDataHandler(bot, logger) {
-    return function handleData(bufferData) {
+    return async function handleData(bufferData) {
         logger.verbose("CLI data input")
         const data = String(bufferData)
         const tokens = tokenize(data)
@@ -54,7 +67,7 @@ function createDataHandler(bot, logger) {
         const validActions = Object.keys(commands)
         const [command] = tokens
         if (validActions.includes(command)) {
-            commands[command]({
+            await commands[command]({
                 bot,
                 logger,
                 tokens,

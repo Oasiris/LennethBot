@@ -8,7 +8,21 @@
 
 ## Setup Checklist
 
- * [ ] Filled out `BOT_TOKEN` field in `.env`
+ * [ ] Filled out `.env`
+ * [ ] Ran `npm install`
+ * [ ] Added `secret/service-account.json` for your Firebase project 
+ * [ ] Set up Firebase
+
+#### Setting up Firebase
+
+```sh
+npm install -g firebase-tools
+firebase login
+firebase list
+firebase use <project-to-use>
+```
+
+---
 
 #### Images of Lenneth
 

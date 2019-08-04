@@ -17,19 +17,12 @@ const COMMANDS = {
         unlisted: true,
         effect: ({ say }) => say('Pong!'),
     },
+
     pong: {
         description: '',
         unlisted: true,
         effect: ({ say }) => say('Ping!'),
     },
-
-    async: async ({ say }) => {
-        say("ZZZ...")
-        await Util.sleep(1000)
-        say("(wakes up)")
-    },
-
-
 
     about: {
         description: 'Learn more about Lenneth, the valkyrie bot.',
@@ -39,8 +32,17 @@ I'm a gaming Discord bot, and I'm currently under development. Type "${process.e
 In my free time, I search for suitable souls in Midgard to become my Einherjar, to fight alongside the Aesir to help prevent Ragnarok.
 My favorite hobby is long walks in flower meadows.`)
         }
-    }
+    },
 
+    async: {
+        description: '',
+        unlisted: true,
+        effect: async ({ say }) => {
+            say("ZZZ...")
+            await Util.sleep(1000)
+            say("(wakes up)")
+        }
+    },
 }
 
 // export default COMMANDS

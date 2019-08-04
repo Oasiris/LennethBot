@@ -46,7 +46,7 @@ const COMMANDS = commands
 /**
  * Class full of functions that do neat things for incoming messages.
  */
-export class MessageUtil {
+export class MessageUtils {
     static isCommand(string: string, commandBank = commands) {
         const isNull = val => val === null
         return string.indexOf(COMMAND_PREFIX) === 0
@@ -64,10 +64,10 @@ export class MessageUtil {
         let hasIntent = false
         const { content } = msg
 
-        const isCommand = MessageUtil.isCommand(content)
+        const isCommand = MessageUtils.isCommand(content)
         if (isCommand) {
             hasIntent = true
-            const pureCommand = MessageUtil.purifyCommand(content)
+            const pureCommand = MessageUtils.purifyCommand(content)
             // return {
             //     hasIntent,
             //     isCommand, 
@@ -95,7 +95,7 @@ export class MessageUtil {
         botActions: { [key: string]: Function }, 
         onValid: (string, MessageIntent) => void, 
         onInvalid: (string, MessageIntent) => void,
-    ) {
+    ): Promise<boolean | void> {
         const validVerbs = Object.keys(COMMANDS)
         const { verb, tokens } = intent
 
@@ -124,17 +124,17 @@ export class MessageUtil {
 
         // Execute
         try {
-            if (params) {
-                params.forEach(([tokenIdx, param, isRequired]) => {
-                    console.log({ tokenIdx, param, isRequired, tokens })
-                    if (isRequired && tokenIdx >= tokens.length) {
-                        const errString = `Missing required field: "${param}" (${ordinal(tokenIdx)} parameter)`
-                        botActions.say(errString)
-                        throw new Error(errString)
-                    }
-                })
+            // Validate params/args
+            const validation = CommandUtils.validateParams({ params, tokens })
+            if (!validation.isValid) {
+                botActions.say(validation.message!)
+                return false
             }
-            console.log({ commandFunction, params })
+
+            // Inject into payload
+            // TODO
+
+            // Execute command
             commandFunction(commandPayload)
         } catch (err) {
             console.error(err)
@@ -171,6 +171,31 @@ export class MessageUtil {
     }
 }
 
+class CommandUtils {
+    static validateParams({
+        params,
+        tokens,
+    }): {
+        isValid: boolean,
+        message?: string,  // Error message.
+    } {
+        if (!params) {
+            return { isValid: true }
+        }
+        for (const [tokenIdx, param, isRequired] of params) {
+            console.log([tokenIdx, param, isRequired])
+            if (isRequired && tokenIdx >= tokens.length) {
+                const errString = `Missing required field: "${param}" (${ordinal(tokenIdx)} parameter)`
+                return {
+                    isValid: false,
+                    message: errString,
+                }
+            }
+        }
+        return { isValid: true }
+    }
+}
+
 /**
  * Given a Message, returns actions that can be invoked by the bot
  * using properties of the object.
@@ -197,9 +222,9 @@ async function handleMessageEvent(msg: Discord.Message) {
         logger.verbose(`Command ${command} by ${msg.author.tag} failed`)
     }
     
-    const intent = MessageUtil.getIntent(msg)
+    const intent = MessageUtils.getIntent(msg)
     if (intent.hasIntent) {
-        await MessageUtil.actOnIntent(
+        await MessageUtils.actOnIntent(
             intent, botActions, onValidCommand, onInvalidCommand
         )
     }
