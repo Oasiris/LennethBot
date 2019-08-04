@@ -47,7 +47,9 @@ const CLI_COMMANDS = {
     writeToFirestore: async ({}) => {
         await db.collection('test').add({
             isSaved: true,
+            savedAt: new Date(),
         })
+        console.log('Done')
     }
 
     

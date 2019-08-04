@@ -15,8 +15,14 @@ COMMANDS.pokedex = {
   ],
 }
 
-COMMANDS.pokedex.effect = async ({ say, tokens }) => {
+COMMANDS.pokedex.effect = async ({ say, tokens, params }) => {
   say("Coming soon!")
+}
+
+// Fetching 
+
+async function fetchPokemon({ name, id }) {
+  
 }
 
 

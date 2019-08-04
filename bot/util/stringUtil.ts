@@ -9,7 +9,7 @@ export class StringUtil {
     static tokenize(str: string) {
         return str
             .trim()
-            .split(/s+/)
+            .split(/\s+/)
             .map((s) => s.trim())
     }
 

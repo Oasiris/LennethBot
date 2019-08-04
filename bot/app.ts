@@ -3,7 +3,9 @@ require('dotenv-safe').config()
 
 // Dependencies
 import * as Discord from 'discord.js'
+import * as R from 'ramda'
 import { not, propEq } from 'ramda'
+
 import { instantiateLogger as createLogger } from './logger'
 import commands from './commands'
 import { startCli } from './cli'
@@ -11,6 +13,7 @@ import { StringUtil } from './util/stringUtil'
 import { FullCommand } from './models/command'
 import { MessageIntent } from './models/messageIntent'
 // import ordinal = require('ordinal')
+
 import * as _ordinal from 'ordinal'
 const ordinal = <any>_ordinal
 
@@ -52,7 +55,7 @@ export class MessageUtils {
         return string.indexOf(COMMAND_PREFIX) === 0
     }
     
-    static purifyCommand(fullCommandString, commandBank = commands) {
+    static stripPrefix(fullCommandString, commandBank = commands) {
         return fullCommandString.slice(COMMAND_PREFIX.length)
     }
 
@@ -67,20 +70,18 @@ export class MessageUtils {
         const isCommand = MessageUtils.isCommand(content)
         if (isCommand) {
             hasIntent = true
-            const pureCommand = MessageUtils.purifyCommand(content)
-            // return {
-            //     hasIntent,
-            //     isCommand, 
-            //     message: messageContent,
-            //     verb: pureCommand,
-            // }
-            return {
+            const tokenizableContent = MessageUtils.stripPrefix(content)
+            const tokens = StringUtil.tokenize(tokenizableContent)
+            const verb = tokens[0]
+            const intentObject = {
                 msg,
                 content,
                 hasIntent,
-                verb: pureCommand,
-                tokens: StringUtil.tokenize(content),
+                verb,
+                tokens,
             }
+            console.log(intentObject)
+            return intentObject
         }
         return { hasIntent: false };
     }
@@ -99,13 +100,14 @@ export class MessageUtils {
         const validVerbs = Object.keys(COMMANDS)
         const { verb, tokens } = intent
 
+        console.log({ verb })
         if (!validVerbs.includes(verb)) {
             return onInvalid(verb, intent)
         }
 
         const cmd = COMMANDS[verb]
         let commandFunction, params, args
-        let commandPayload = botActions
+        const commandPayload = R.clone(botActions)
         console.log({ cmd })
         
         if (typeof cmd === 'function') {
@@ -132,9 +134,17 @@ export class MessageUtils {
             }
 
             // Inject into payload
+            commandPayload.args = <any>{}
+            for (const [tokenIdx, param] of params) {
+                const arg = tokens[tokenIdx] || undefined
+                if (arg) {
+                    commandPayload.args[param] = arg
+                }
+            }
             // TODO
 
             // Execute command
+            console.log({ commandPayload })
             commandFunction(commandPayload)
         } catch (err) {
             console.error(err)
@@ -184,6 +194,7 @@ class CommandUtils {
         }
         for (const [tokenIdx, param, isRequired] of params) {
             console.log([tokenIdx, param, isRequired])
+            console.log(tokens.length)
             if (isRequired && tokenIdx >= tokens.length) {
                 const errString = `Missing required field: "${param}" (${ordinal(tokenIdx)} parameter)`
                 return {
