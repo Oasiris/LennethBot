@@ -4,6 +4,8 @@
 
     "alwaysStrict": true,
     "experimentalDecorators": true,
+    // "noImplicitAny": true,
+
     "lib": ["es2018"],
     "target": "es2018",
     "module": "commonjs",
@@ -11,6 +13,6 @@
   },
   "compileOnSave": true,
   "trailing-comma": true,
-  "include": ["bot/**/*.ts"],
+  "include": ["src/**/*.ts"],
   "exclude": ["node_modules"]
 }

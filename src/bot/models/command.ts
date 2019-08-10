@@ -9,9 +9,16 @@ export type FullCommand = {
   params?: CommandParams
 }
 
-export type CommandParams = 
-  (
-    [number, string] 
+export type SimpleCommand = any
+
+export type Command = FullCommand | SimpleCommand
+
+export type CommandBank = {
+  [key: string]: Command
+}
+
+export type CommandParams = Array<(
+  [number, string]
   | [number, string, boolean]
   | [number, string, boolean, string]
-  )[]
+  )>

@@ -1,26 +1,34 @@
+/**
+ * Entry script for the program.
+ * Contains bot setup and login, in addition to basic message parsing logic.
+ */
+
 // Load environment variables
+/* tslint:disable-next-line:no-var-requires */
 require('dotenv-safe').config()
 
-// Dependencies
-import * as Discord from 'discord.js'
-import * as R from 'ramda'
+import Discord = require('discord.js')
+import R = require('ramda')
 import { not, propEq } from 'ramda'
 
 import { instantiateLogger as createLogger } from './logger'
-import commands from './commands'
+import allCommands from './commands'
 import { startCli } from './cli'
-import { StringUtil } from './util/stringUtil'
+
 import { FullCommand } from './models/command'
 import { MessageIntent } from './models/messageIntent'
-// import ordinal = require('ordinal')
 
-import * as _ordinal from 'ordinal'
-const ordinal = <any>_ordinal
+import { StringUtil } from './util/stringUtil'
 
-// === Variables ===
+import _ordinal = require('ordinal')
+const ordinal = _ordinal as any
+
+/* Constants */
 
 const COMMAND_PREFIX = process.env.COMMAND_PREFIX
 
+/** A map from command names to functions. Each function takes an object of bot actions. */
+const COMMANDS = allCommands
 
 // === Logger Setup ===
 
@@ -28,10 +36,10 @@ const logger = createLogger()
 
 // === Bot Setup ===
 
-let bot
+let bot: Discord.Client
 try {
     bot = new Discord.Client()
-} catch(err) {
+} catch (err) {
     logger.error(bot)
     process.exit(1)
 }
@@ -40,22 +48,18 @@ const { BOT_TOKEN } = process.env
 
 // === Commands ===
 
-/** 
- * A map from command names to functions.
- * Each function takes an object of bot actions.
- */
-const COMMANDS = commands
+
 
 /**
  * Class full of functions that do neat things for incoming messages.
  */
 export class MessageUtils {
-    static isCommand(string: string, commandBank = commands) {
-        const isNull = val => val === null
-        return string.indexOf(COMMAND_PREFIX) === 0
+    private static isCommand(str: string, commandBank = allCommands) {
+        const isNull = (val) => val === null
+        return str.indexOf(COMMAND_PREFIX) === 0
     }
     
-    static stripPrefix(fullCommandString, commandBank = commands) {
+    private static stripPrefix(fullCommandString: string, commandBank = allCommands) {
         return fullCommandString.slice(COMMAND_PREFIX.length)
     }
 
@@ -83,43 +87,48 @@ export class MessageUtils {
             console.log(intentObject)
             return intentObject
         }
-        return { hasIntent: false };
+        return { hasIntent: false }
     }
 
     /** 
      * Does two things:
      *  - Evaluates if a command translates to a valid action.
      *  - If so, executes said action.
+     * @returns Whether or not an action was executed.
      */
     static async actOnIntent(
-        intent: MessageIntent, 
-        botActions: { [key: string]: Function }, 
-        onValid: (string, MessageIntent) => void, 
-        onInvalid: (string, MessageIntent) => void,
+        intent: MessageIntent,
+        botActions: { say: (actions: any) => void, bot?: Discord.Client },
+        onValid: (verb: string, intent: MessageIntent) => void,
+        onInvalid: (verb: string, intent: MessageIntent) => void,
     ): Promise<boolean | void> {
+        const handleValid = () => onValid(verb, intent)
+        const handleInvalid = () => onInvalid(verb, intent)
+
         const validVerbs = Object.keys(COMMANDS)
         const { verb, tokens } = intent
 
         console.log({ verb })
         if (!validVerbs.includes(verb)) {
-            return onInvalid(verb, intent)
+            handleInvalid()
+            return false
         }
 
         const cmd = COMMANDS[verb]
-        let commandFunction, params, args
+        let commandFunction
+        let params
+        let args
         const commandPayload = R.clone(botActions)
         console.log({ cmd })
         
         if (typeof cmd === 'function') {
             commandFunction = cmd
-            params = null
+            params = []
             args = null
             // console.log({ cmd })
         } else if ((cmd as FullCommand).effect) {
             commandFunction = cmd.effect
-            params = cmd.params
-            
-            
+            params = cmd.params || []
         } else {
             botActions.say(`That command is currently broken—try again later!`)
         }
@@ -134,23 +143,25 @@ export class MessageUtils {
             }
 
             // Inject into payload
-            commandPayload.args = <any>{}
+            commandPayload.args = {} as any
             for (const [tokenIdx, param] of params) {
                 const arg = tokens[tokenIdx] || undefined
                 if (arg) {
                     commandPayload.args[param] = arg
                 }
             }
+            commandPayload.bot = bot
             // TODO
 
             // Execute command
             console.log({ commandPayload })
+            handleValid()
             commandFunction(commandPayload)
+            return
         } catch (err) {
             console.error(err)
         }
         
-
         /*
         I want to put in:
 
@@ -159,7 +170,6 @@ export class MessageUtils {
         tokens: StringUtil.tokenize(msg.content),
         msg,
         */
-
 
 
         // if (validActions.includes(command)) {
@@ -219,11 +229,12 @@ function generateBotActions(msg: Discord.Message) {
 
 async function handleMessageEvent(msg: Discord.Message) {
     if (msg.author.bot) {
-        return;
+        return
     }
-    if (msg.channel instanceof Discord.TextChannel)
+    if (msg.channel instanceof Discord.TextChannel) {
         logger.verbose(`<${msg.author.tag}> [#${msg.channel.name}]: ${msg.content}`)
-    
+    }
+
     // Functions
     const botActions = generateBotActions(msg)
     const onValidCommand = (command, intentObject) => {
@@ -242,7 +253,7 @@ async function handleMessageEvent(msg: Discord.Message) {
 }
 
 function handleReady() {
-    logger.info("Ready!")
+    logger.info('Ready!')
 }
 
 // === Bot Handling ===
@@ -250,14 +261,13 @@ function handleReady() {
 bot.on('ready', handleReady)
 bot.on('message', handleMessageEvent)
 
-
 // === Channel Map ===
 
 // Eggland guild ID
 const { GUILD_ID } = process.env
 console.log({ GUILD_ID })
 
-let channelNameMap = {};
+const channelNameMap = {}
 
 bot.on('ready', createChannelMap)
 

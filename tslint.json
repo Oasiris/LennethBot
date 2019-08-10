@@ -1,0 +1,59 @@
+{
+    "defaultSeverity": "error",
+    "extends": [
+        "tslint:recommended"
+    ],
+    "jsRules": {},
+    "rules": {
+        /* TEMPORARY */
+        "no-unsafe-any": false,
+
+        
+        // === Lax ===
+        
+        // Impoorts in any order
+        "ordered-imports": {
+            "options": {
+                "import-sources-order": "any",
+                "named-imports-order": "any"
+            }
+        },
+        "object-literal-sort-keys": false,
+        "object-literal-shorthand": false,
+        // ????
+        "interface-over-type-literal": false,
+        "arrow-parens": false,
+        "no-console": false,
+        "member-ordering": false,
+
+        // === Warning level ===
+
+        "semicolon": {
+            "options": ["never"],
+            "severity": "warning"
+        },
+        "no-trailing-whitespace": {
+            "options": ["ignore-comments", "ignore-jsdoc", "ignore-blank-lines", "ignore-template-strings"],
+            "severity": "warning"
+        },
+
+
+        // "no-unsafe-any": true,
+        "arrow-return-shorthand": true,
+
+        // === Default level ===
+
+        "quotemark": {
+            "options": ["single"],
+            "severity": "default"
+        },
+        "trailing-comma": {
+            "options": {
+                "singleline": "never"
+            }
+        }
+        // "array-type": [true, "generic"],
+
+    },
+    "rulesDirectory": []
+}
