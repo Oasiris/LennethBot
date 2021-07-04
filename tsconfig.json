@@ -12,6 +12,7 @@
     "resolveJsonModule": true
   },
   "compileOnSave": true,
+  "strictNullChecks": true,
   "trailing-comma": true,
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules"]
