@@ -45,9 +45,15 @@ export class Bot {
 
     private async handleMessage(msg: Message): Promise<void> {
         if (ParseUtil.isInvocation(msg)) {
+            // Log the invocation to terminal.
+            const invocation = ParseUtil.getInvocation(msg)
             if (msg.channel.type === 'text') {
                 console.log(`(#${msg.channel.name}) ${msg.author.username}: "${msg.content}"`)
-                console.log(ParseUtil.getInvocation(msg))
+                console.log(invocation)
+            }
+            // Fulfill the invocation.
+            if (ParseUtil.isFulfillable(invocation)) {
+                // TODO: Fulfill the command.
             }
         }
     }

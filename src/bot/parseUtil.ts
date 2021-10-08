@@ -35,6 +35,15 @@ export class ParseUtil {
         return this.isRespondable(message) && this.doesInvoke(message)
     }
 
+    /**
+     * @returns Whether the invocation seems fulfillable (e.g. invokes an existing/legal command)
+     * or not.
+     */
+    static isFulfillable(invocation: Invocation): boolean {
+        // TODO: Finish this
+        return false
+    }
+
     // —————————
 
     /**
