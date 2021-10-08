@@ -1,0 +1,3 @@
+## Config
+
+The secrets (`.env`) for my bot application can be found at **[this link](https://docs.google.com/document/d/1qWtd9IQGMeRhS6V2lJdz1Hm1Mof-cvdF1NtQgt4Xpzs/edit?usp=sharing)**! You'll need to get access by requesting permission...
