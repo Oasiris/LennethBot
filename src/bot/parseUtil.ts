@@ -1,7 +1,9 @@
 import { Message } from 'discord.js'
+import { PingCommand } from '../commands'
+import { Command } from '../commands/command'
 
 /** Data type representing someone attempting to call a command using the prefix. */
-type Invocation = {
+export type Invocation = {
     message: Message
     /** Either the name of a valid command, or `null` for an invalid command. */
     command: string | null
@@ -14,7 +16,14 @@ type Invocation = {
  */
 export class ParseUtil {
     /**
-     * @returns Message parsed into an Invocation.
+     * @returns Whether the specified message is a valid invocation.
+     */
+    static isInvocation(message: Message): boolean {
+        return this.isRespondable(message) && this.doesInvoke(message)
+    }
+
+    /**
+     * @returns Message parsed as an Invocation.
      * @throws When the specified message does not invoke any command.
      */
     static getInvocation(message: Message): Invocation {
@@ -29,26 +38,22 @@ export class ParseUtil {
     }
 
     /**
-     * @returns Whether the specified message is a valid invocation.
-     */
-    static isInvocation(message: Message): boolean {
-        return this.isRespondable(message) && this.doesInvoke(message)
-    }
-
-    /**
      * @returns Whether the invocation seems fulfillable (e.g. invokes an existing/legal command)
      * or not.
      */
-    static isFulfillable(invocation: Invocation): boolean {
+    static canFulfill(invocation: Invocation): Command | null {
         // TODO: Finish this
-        return false
+        if (invocation.command === 'ping') {
+            return new PingCommand()
+        }
+        return null
     }
 
     // —————————
 
     /**
      * @param msg Message that begins with the command prefix.
-     * @returns The "words" in the invocation.
+     * @returns The "words" in the invocation as a list of strings.
      */
     private static getWordsAfterPrefix(msg: Message): string[] {
         const PREFIX = process.env.COMMAND_PREFIX!

@@ -6,7 +6,6 @@ import { ParseUtil } from './parseUtil'
  */
 export class Bot {
     botToken: string
-
     client: Discord.Client
 
     /**
@@ -39,10 +38,12 @@ export class Bot {
 
     // === Handlers ===
 
+    /** Log when ready. */
     private handleReady(): void {
         console.log('Ready!')
     }
 
+    /** Receive, parse, and respond to a message from a user. */
     private async handleMessage(msg: Message): Promise<void> {
         if (ParseUtil.isInvocation(msg)) {
             // Log the invocation to terminal.
@@ -52,8 +53,9 @@ export class Bot {
                 console.log(invocation)
             }
             // Fulfill the invocation.
-            if (ParseUtil.isFulfillable(invocation)) {
-                // TODO: Fulfill the command.
+            const invokedCommand = ParseUtil.canFulfill(invocation)
+            if (invokedCommand !== null) {
+                invokedCommand.run({ bot: this, invocation })
             }
         }
     }

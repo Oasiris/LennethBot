@@ -6,8 +6,6 @@
 /* tslint:disable-next-line:no-var-requires */
 require('dotenv-safe').config()
 
-import Discord from 'discord.js'
-
 import { Bot } from './bot/bot'
 
 const PREFIX = process.env.COMMAND_PREFIX
