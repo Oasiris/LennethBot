@@ -5,13 +5,27 @@ import { ParseUtil } from './parseUtil'
  * The main, singleton Bot class.
  */
 export class Bot {
+    /** Singleton instance. */
+    private static _instance: Bot
+
+    /** Get an instance of a Bot object. */
+    static get instance(): Bot {
+        if (!Bot._instance) {
+            Bot._instance = new Bot(process.env.BOT_TOKEN)
+        }
+        return this._instance
+    }
+
     botToken: string
     client: Discord.Client
+
+    // TODO: Instantiate a class "PokecardScraper" here, which is just an Express app under the
+    // hood. Pass it into every invokedCommand.run call.
 
     /**
      * @throws When `new Discord.Client()` throws.
      */
-    constructor(botToken: string | undefined) {
+    private constructor(botToken: string | undefined) {
         // Initialize with info.
         if (botToken === undefined) {
             throw Error(`Invalid botToken '${botToken}'.'`)
@@ -32,7 +46,7 @@ export class Bot {
      *
      * @throws When the bot is unable to login to Discord.
      */
-    login(): void {
+    public login(): void {
         this.client.login(process.env.BOT_TOKEN).then(() => console.log(`Bot logged into server.`))
     }
 

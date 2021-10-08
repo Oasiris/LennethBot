@@ -1,19 +1,26 @@
 import { Bot } from '../bot/bot'
 import { Invocation } from '../bot/parseUtil'
 
-export interface Command {
+/**
+ * Template for all commands.
+ *
+ * IMPORTANT: Classes that implement Command may NOT have **side effects** in their constructor.
+ *
+ * (Ideally, they should all have "dummy constructors" that are completely empty.)
+ */
+export abstract class Command {
     /** The name used to invoke the command. */
-    name: string
+    static commandName: string
 
     /** A brief description of what the command does. */
-    description?: string
+    static description?: string
 
     /** Other names that also invoke this command. */
-    aliases?: string[]
+    static aliases?: string[]
 
     /** A string demonstrating the command's usage. */
-    usage?: string
+    static usage?: string
 
     /** Run the command. */
-    run(parameters: { bot: Bot; invocation: Invocation }): Promise<any>
+    abstract run(parameters: { bot: Bot; invocation: Invocation }): Promise<any>
 }

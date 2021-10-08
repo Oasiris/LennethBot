@@ -15,7 +15,7 @@ console.log(`Communicating with bot // prefix "${PREFIX}"...`)
 // 1. Initialize the bot.
 let bot: Bot
 try {
-    bot = new Bot(process.env.BOT_TOKEN)
+    bot = Bot.instance // Instantiates the singleton Bot object.
 } catch (err) {
     console.error(err)
     throw err

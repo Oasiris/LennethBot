@@ -11,7 +11,7 @@ export type Invocation = {
 }
 
 /**
- * ParseUtil is a utility class that breaks down text into
+ * ParseUtil is a utility class that breaks down message text into
  * recognizable commands.
  */
 export class ParseUtil {
