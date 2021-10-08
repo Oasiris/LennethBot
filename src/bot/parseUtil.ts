@@ -6,7 +6,7 @@ import { Command } from '../commands/command'
 export type Invocation = {
     message: Message
     /** Either the name of a valid command, or `null` for an invalid command. */
-    command: string | null
+    commandName: string | null
     arguments: (number | string)[]
 }
 
@@ -28,11 +28,11 @@ export class ParseUtil {
      */
     static getInvocation(message: Message): Invocation {
         const wordsAfterPrefix = this.getWordsAfterPrefix(message)
-        const command = wordsAfterPrefix[0]
+        const commandName = wordsAfterPrefix[0]
         wordsAfterPrefix.shift()
         return {
             message,
-            command,
+            commandName,
             arguments: wordsAfterPrefix,
         }
     }
@@ -43,7 +43,7 @@ export class ParseUtil {
      */
     static canFulfill(invocation: Invocation): Command | null {
         // TODO: Finish this
-        if (invocation.command === 'ping') {
+        if (invocation.commandName === 'ping') {
             return new PingCommand()
         }
         return null
@@ -57,7 +57,7 @@ export class ParseUtil {
      */
     private static getWordsAfterPrefix(msg: Message): string[] {
         const PREFIX = process.env.COMMAND_PREFIX!
-        const contentAfterPrefix = msg.content.slice(PREFIX.length)
+        const contentAfterPrefix = msg.content.slice(PREFIX.length) // Remove prefix.
         return contentAfterPrefix
             .split(' ')
             .map((word) => word.trim())
@@ -82,9 +82,9 @@ export class ParseUtil {
             return false
         }
 
-        const contentBeforeSpace = this.getWordsAfterPrefix(msg)[0]
+        const contentBeforeSpace = this.getWordsAfterPrefix(msg)[0] // Get first "word".
         const hasContentAfterPrefix: boolean = contentBeforeSpace.length !== 0
-        const doesCommandBeginWithLetter: boolean = contentBeforeSpace.match(/^\w+/) !== null
-        return hasContentAfterPrefix && doesCommandBeginWithLetter
+        const doesCommandNameBeginWithLetter: boolean = contentBeforeSpace.match(/^\w+/) !== null
+        return hasContentAfterPrefix && doesCommandNameBeginWithLetter
     }
 }
