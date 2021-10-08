@@ -11,7 +11,7 @@ import Discord from 'discord.js'
 import { Bot } from './bot/bot'
 
 const PREFIX = process.env.COMMAND_PREFIX
-console.log(PREFIX, process.env.BOT_TOKEN)
+console.log(`Communicating with bot // prefix "${PREFIX}"...`)
 
 // ———————————————————————————————————————————
 // 1. Initialize the bot.
@@ -22,13 +22,6 @@ try {
     console.error(err)
     throw err
 }
-
-
-
-
-
-
-
 
 // Login.
 bot.login()
