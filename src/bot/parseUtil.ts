@@ -19,7 +19,7 @@ export class ParseUtil {
      * @returns Whether the specified message is a valid invocation.
      */
     static isInvocation(message: Message): boolean {
-        return this.isRespondable(message) && this.doesInvoke(message)
+        return this.hasValidAuthor(message) && this.doesInvoke(message)
     }
 
     /**
@@ -49,7 +49,7 @@ export class ParseUtil {
         return null
     }
 
-    // —————————
+    // === Private Methods ===
 
     /**
      * @param msg Message that begins with the command prefix.
@@ -65,10 +65,9 @@ export class ParseUtil {
     }
 
     /**
-     * @returns Whether the specified message is respondable – that is, whether it was authored by
-     * a non-bot.
+     * @returns Whether the message was authored by a non-bot.
      */
-    private static isRespondable(msg: Message): boolean {
+    private static hasValidAuthor(msg: Message): boolean {
         return !msg.system && !msg.author.bot
     }
 

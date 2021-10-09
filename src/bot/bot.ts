@@ -8,6 +8,12 @@ export class Bot {
     /** Singleton instance. */
     private static _instance: Bot
 
+    botToken: string
+    client: Discord.Client
+
+    // TODO: Instantiate a class "PokecardScraper" here, which is just an Express app under the
+    // hood. Pass it into every invokedCommand.run call.
+
     /** Get an instance of a Bot object. */
     static get instance(): Bot {
         if (!Bot._instance) {
@@ -15,12 +21,6 @@ export class Bot {
         }
         return this._instance
     }
-
-    botToken: string
-    client: Discord.Client
-
-    // TODO: Instantiate a class "PokecardScraper" here, which is just an Express app under the
-    // hood. Pass it into every invokedCommand.run call.
 
     /**
      * @throws When `new Discord.Client()` throws.
